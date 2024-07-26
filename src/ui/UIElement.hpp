@@ -1,17 +1,24 @@
 #pragma once
-#include "raylib.h"
+#include <functional>
 #include <string>
 
 class UIElement {
 private:
-  bool active;
+  bool visible;
 
 public:
   std::string name;
-  UIElement(const std::string name) : name(name) { active = false; }
+  int zIndex;
+  std::function<bool()> handleInput; // Function to handle input
+
+  UIElement(const std::string name)
+      : name(name), visible(false), zIndex(0), handleInput(nullptr) {}
   virtual ~UIElement() = default;
 
-  virtual void onClick() = 0;
+  void setHandleInput(const std::function<bool()> &func) { handleInput = func; }
   virtual void update() = 0;
   virtual void render() = 0;
+  void setVisible() { visible = true; }
+  void setInvisible() { visible = false; }
+  bool isVisible() { return visible; }
 };

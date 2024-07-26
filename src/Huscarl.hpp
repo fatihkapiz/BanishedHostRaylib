@@ -1,15 +1,17 @@
 #include "raylib.h"
 #include <functional>
 #include <string>
+
 class Huscarl {
-  using EffectFunction = std::function<void()>;
 
 private:
   std::string name;
-  EffectFunction effect;
   Texture2D texture;
 
 public:
+  using EffectFunction = std::function<void()>;
+  EffectFunction effect;
+
   ~Huscarl() { UnloadTexture(texture); }
   Huscarl(std::string name, EffectFunction effect, const char *_image)
       : name(std::move(name)), effect(std::move(effect)) {
@@ -18,7 +20,7 @@ public:
     UnloadImage(image);
   }
 
-  void ApplyEffects() { effect(); }
+  void ApplyEffect() { effect(); }
   const std::string &getName() const { return name; }
   const Texture2D &getTexture() { return texture; }
 };

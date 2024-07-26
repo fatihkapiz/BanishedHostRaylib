@@ -1,16 +1,15 @@
 #pragma once
-#include "ClickableUIElement.hpp"
 #include "Gold.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
 
-class UiVectorParent {
+class UIVector {
 private:
   std::vector<std::unique_ptr<UIElement>> elements;
 
 public:
-  UiVectorParent() {}
+  UIVector() {}
 
   template <typename T, typename... Args,
             typename = std::enable_if_t<std::is_base_of_v<UIElement, T>>>
@@ -36,14 +35,18 @@ public:
     return nullptr;
   }
 
-  void handleInput() {
+  /*
+  bool handleInput() {
     for (auto &el : elements) {
       if (auto clickableElement =
               dynamic_cast<ClickableUIElement *>(el.get())) {
-        clickableElement->handleInput();
+        if (clickableElement->handleInput()) {
+          return true;
+        }
       }
     }
   }
+  */
 
   // Update all UI elements
   void update() {

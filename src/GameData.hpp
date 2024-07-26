@@ -1,59 +1,36 @@
 #pragma once
-#include "Artifact.hpp"
-#include "Huscarl.hpp"
-#include "Retinue.hpp"
-#include "Ship.hpp"
-#include <memory>
-#include <vector>
 
-class Ship;
-
-namespace Gamedata {
-
-inline int Gold = 10;
-inline float Food = 10;
-inline int Fame = 10;
-inline int Loot = 10;
-inline std::unique_ptr<Retinue> retinue;
-inline std::unique_ptr<Ship> ship;
-
-inline int getGold() { return Gold; }
-inline void setGold(int amount) { Gold = amount; }
-inline void addGold(int amount) { Gold += amount; }
-inline int getFame() { return Fame; }
-inline void setFame(int amount) { Fame = amount; }
-inline void addFame(int amount) { Fame += amount; }
-inline int getFood() { return Food; }
-inline void setFood(float amount) { Food = amount; }
-inline void addFood(float amount) { Food += amount; }
-inline int getLoot() { return Loot; }
-inline void setLoot(int amount) { Loot = amount; }
-inline void addLoot(int amount) { Loot += amount; }
-
-inline std::vector<Huscarl> huscarls;
-inline std::vector<Artifact> artifacts;
-
-inline void addHuscarl(Huscarl huscarl) { huscarls.push_back(huscarl); }
-
-inline void addArtifact(Artifact artifact) { artifacts.push_back(artifact); }
-
-inline void ApplyEffects() {
-  if (retinue) {
-    retinue->ApplyEffects();
+class GameData {
+public:
+  static GameData &getInstance() {
+    static GameData instance;
+    return instance;
   }
-  if (ship) {
-    ship->ApplyEffects();
-  }
-  for (auto &art : artifacts) {
-    art.ApplyEffects();
-  }
-  for (auto &huscarl : huscarls) {
-    huscarl.ApplyEffects();
-  }
-}
 
-inline void Initialize() {
-  retinue = std::make_unique<Retinue>();
-  ship = std::make_unique<Ship>();
-}
-} // namespace Gamedata
+  GameData(const GameData &) = delete;
+  GameData &operator=(const GameData &) = delete;
+
+  int getGold() const { return Gold; }
+  void setGold(int amount) { Gold = amount; }
+  void addGold(int amount) { Gold += amount; }
+
+  int getFame() const { return Fame; }
+  void setFame(int amount) { Fame = amount; }
+  void addFame(int amount) { Fame += amount; }
+
+  float getFood() const { return Food; }
+  void setFood(float amount) { Food = amount; }
+  void addFood(float amount) { Food += amount; }
+
+  int getLoot() const { return Loot; }
+  void setLoot(int amount) { Loot = amount; }
+  void addLoot(int amount) { Loot += amount; }
+
+private:
+  GameData() = default;
+
+  int Gold = 10;
+  float Food = 10;
+  int Fame = 10;
+  int Loot = 10;
+};

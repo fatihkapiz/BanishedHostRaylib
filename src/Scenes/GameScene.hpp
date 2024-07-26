@@ -1,30 +1,35 @@
 #pragma once
-#include "../ui/Button.hpp"
-#include "../ui/UI.hpp"
-#include "../ui/UiVectorParent.hpp"
+#include "../ui/GameSceneUI.hpp"
 #include "Scene.hpp"
 #include "raylib.h"
 #include <iostream>
+#include <memory>
 
 class GameScene : public Scene {
 private:
-  UiVectorParent ui;
+  std::unique_ptr<GameSceneUI> ui;
+  void InitializeUI() {}
 
 public:
-  GameScene() {
-    ui = UiVectorParent{};
-    ui.addElement<Button>(
-        std::string("NextTurnButton"), 0, 0, 100, 100, "Next Turn", 20,
-        []() { std::cout << "Next turn button clicked" << std::endl; });
-  }
+  GameScene() { ui = std::make_unique<GameSceneUI>(); }
   ~GameScene() {}
 
-  void update() override {
-    ui.update();
-    ui.handleInput();
+  bool handleInput() override {
+    if (ui->handleInput()) {
+      return true;
+    }
+
+    // handle game input here
+
+    return false;
   }
 
-  void render() override { ui.render(); }
+  void update() override { ui->update(); }
+
+  void render() override {
+    ui->render();
+    DrawText("Game Scene active", 10, 10, 20, BLACK);
+  }
 
   void RosterButton() {}
 };

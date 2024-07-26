@@ -3,7 +3,7 @@
 
 class Retinue {
 public:
-  Retinue() {}
+  Retinue() = default;
   float experience = 0.5f;
 
   int Axemen = 10;
@@ -19,5 +19,5 @@ public:
   float armorWeight = 0.30f;
   float armorQuality = 0.30f;
 
-  void ApplyEffects() { Gamedata::addFood(-men * 0.02); }
+  void ApplyEffect() { GameData::getInstance().addFood(-men * 0.02); }
 };

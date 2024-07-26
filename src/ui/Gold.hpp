@@ -3,7 +3,7 @@
 #include "UIElement.hpp"
 #include "raylib.h"
 
-class Gold : public UIElement {
+class GoldBackup : public UIElement {
 private:
   Rectangle rect;
   Color color;
@@ -11,7 +11,7 @@ private:
 public:
   Gold(std::string name, float x, float y, float width, float height, Color col)
       : UIElement(name) {
-    rect = {x, y, x, y};
+    rect = {x, y, width, height};
   }
 
   void update() override {}

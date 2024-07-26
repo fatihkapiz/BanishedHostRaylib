@@ -3,6 +3,7 @@
 
 class Ship {
 public:
+  Ship() = default;
   int hull = 1;
   int fish_nets = 0;
   int longer_oars = 0;
@@ -13,7 +14,9 @@ public:
   int reinforced_oak_planking = 0;
   int harpoons = 0;
 
-  void ApplyEffects();
+  void ApplyEffect();
 };
 
-inline void Ship::ApplyEffects() { Gamedata::addFood(fish_nets * fish_nets); }
+inline void Ship::ApplyEffect() {
+  GameData::getInstance().addFood(fish_nets * fish_nets);
+}
