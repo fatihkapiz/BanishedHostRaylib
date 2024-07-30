@@ -1,3 +1,4 @@
+#include "Trait.hpp"
 #include "raylib.h"
 #include <functional>
 #include <string>
@@ -6,6 +7,7 @@ class Huscarl {
 
 private:
   std::string name;
+  Trait trait;
   Texture2D texture;
 
 public:
@@ -20,7 +22,7 @@ public:
     UnloadImage(image);
   }
 
-  void ApplyEffect() { effect(); }
+  void ApplyEffects() { effect(); }
   const std::string &getName() const { return name; }
   const Texture2D &getTexture() { return texture; }
 };

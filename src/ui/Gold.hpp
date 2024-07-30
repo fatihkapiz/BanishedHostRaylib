@@ -1,26 +1,29 @@
 #pragma once
-#include "../GameData.hpp"
+#include "../Gamedata.hpp"
+#include "../constants/Constants.hpp"
 #include "UIElement.hpp"
 #include "raylib.h"
 
-class GoldBackup : public UIElement {
-private:
-  Rectangle rect;
-  Color color;
-
+class Gold : public UIElement {
 public:
-  Gold(std::string name, float x, float y, float width, float height, Color col)
-      : UIElement(name) {
+  Rectangle rect;
+  Texture2D texture;
+  std::string text;
+  GameData &gamedata;
+
+  Gold(float x, float y, float width, float height, GameData &gamedata)
+      : UIElement("Gold"), text(std::string("0")), gamedata(gamedata) {
     rect = {x, y, width, height};
+    text = std::to_string(gamedata.getGold());
   }
-
-  void update() override {}
-
+  void update() override { text = std::to_string(gamedata.getGold()); }
   void render() override {
-    DrawRectangleRec(rect, color);
-    DrawText(GameData.gold.c_str(),
-             rect.x + rect.width / 2 - MeasureText(text.c_str(), fontSize) / 2 +
-                 10,
-             rect.y + rect.height / 2 - fontSize / 2, fontSize, WHITE);
+    DrawRectangleRec(rect, RED);
+    DrawText(text.c_str(),
+             rect.x + rect.width / 2 -
+                 MeasureText(text.c_str(), Constants::fontsize) / 2,
+             rect.y + rect.height / 2 - Constants::fontsize / 2,
+             Constants::fontsize, WHITE);
+    DrawRectangleLinesEx(rect, 5, BLACK);
   }
 };

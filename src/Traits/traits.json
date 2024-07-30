@@ -1,0 +1,58 @@
+{
+  "traits": [
+	{
+	  "name": "Blacksmith",
+	  "description": "Improves weapon quality and produces weapons over time.",
+	  "rarity": 0.1,
+	  "effect": "blacksmith_effect"
+	},
+	{
+	  "name": "the Shield",
+	  "description": "Boosts defence in a shield wall.",
+	  "rarity": 0.1,
+	  "effect": "shield_effect"
+	},
+	{
+	  "name": "the Berserker",
+	  "description": "Inflicts greater damage at the cost of losing more men in a fight",
+	  "rarity": 0.1,
+	  "effect": "berserker_effect"
+	},
+	{
+	  "name": "the Spearman"
+	  "description": "Boosts spearmen in the retinue",
+	  "rarity": 0.1,
+	  "effect": "spearmen_effect"
+	},
+	{
+	  "name": "the Swordsman",
+	  "description": "Boosts the swordsmen", 
+	  "rarity": 0.1,
+	  "effect": "swordsmen_effect"
+	},
+	{
+	  "name": "the Axeman",
+	  "description": "Boosts the axemen",
+	  "rarity": 0.1,
+	  "effect": "axemen_effect"
+	},
+	{
+	  "name": "the Stablemaster",
+	  "description": "Enables the training of horsemen",
+	  "rarity": 0.1,
+	  "effect": "stablemaster_effect"
+	},
+	{
+	  "name": "the Looter",
+	  "description": "Increases loot after an event",
+	  "rarity": 0.1,
+	  "effect": "looter_effect"
+	},
+	{
+	  "name": "the Shipbuilder",
+	  "description": "Has a chance to automatically upgrade the ship",
+	  "rarity": 0.1,
+	  "effect": "shipbuilder_effect
+	}
+  ]
+}

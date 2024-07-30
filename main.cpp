@@ -7,9 +7,11 @@ int main(void) {
   InitWindow(800, 450, "raylib [core] example - basic window");
   SetTargetFPS(60);
 
+  GameData gamedata;
+
   Scene *scene;
   std::unique_ptr<MenuScene> menuScene = std::make_unique<MenuScene>();
-  std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>();
+  std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>(gamedata);
   scene = menuScene.get();
 
   float log = 10000;

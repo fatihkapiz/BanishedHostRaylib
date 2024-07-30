@@ -1,4 +1,7 @@
 #pragma once
+#include "../Gamedata.hpp"
+#include "../constants/Constants.hpp"
+#include "Gold.hpp"
 #include "Panel.hpp"
 #include "raylib.h"
 #include <iostream>
@@ -6,31 +9,18 @@
 #include <string>
 #include <vector>
 
-class Gold : public UIElement {
-public:
-  Rectangle rect;
-  Texture2D texture;
-  std::string text;
-
-  Gold(float x, float y, float width, float height)
-      : UIElement("Gold"), text(std::string("0")) {
-    rect = {x, y, width, height};
-  }
-  void update() override {}
-  void render() override { DrawRectangleRec(rect, RED); }
-};
-
 class GameSceneUI : public Panel {
 private:
   std::vector<std::shared_ptr<UIElement>> elements;
+  GameData &gamedata;
 
 public:
-  GameSceneUI() : Panel("GameSceneUI") {
+  GameSceneUI(GameData &gamedata) : Panel("GameSceneUI"), gamedata(gamedata) {
     std::shared_ptr<Panel> top = std::make_shared<Panel>("Top");
     std::cout << "Top panel created" << std::endl;
     elements.push_back(top);
     std::cout << "top panel pushed" << std::endl;
-    top->AddElement(std::make_shared<Gold>(0, 0, 200, 50));
+    top->AddElement(std::make_shared<Gold>(0, 0, 100, 50, gamedata));
     std::cout << "gold pushed" << std::endl;
     top->setPanelVisible();
   }

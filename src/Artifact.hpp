@@ -6,6 +6,7 @@
 class Artifact {
 public:
   using EffectFunction = std::function<void()>;
+  EffectFunction effect;
 
   Artifact(std::string name, EffectFunction effect)
       : name(std::move(name)), effect(std::move(effect)) {}
@@ -15,7 +16,6 @@ public:
 
 private:
   std::string name;
-  EffectFunction effect;
 };
 
 class ArtifactManager {

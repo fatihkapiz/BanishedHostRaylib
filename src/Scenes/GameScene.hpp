@@ -8,10 +8,14 @@
 class GameScene : public Scene {
 private:
   std::unique_ptr<GameSceneUI> ui;
+  GameData &gamedata;
+
   void InitializeUI() {}
 
 public:
-  GameScene() { ui = std::make_unique<GameSceneUI>(); }
+  GameScene(GameData &gamedata) : gamedata(gamedata) {
+    ui = std::make_unique<GameSceneUI>(gamedata);
+  }
   ~GameScene() {}
 
   bool handleInput() override {
@@ -26,10 +30,7 @@ public:
 
   void update() override { ui->update(); }
 
-  void render() override {
-    ui->render();
-    DrawText("Game Scene active", 10, 10, 20, BLACK);
-  }
+  void render() override { ui->render(); }
 
   void RosterButton() {}
 };

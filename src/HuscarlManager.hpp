@@ -1,5 +1,4 @@
 #include "Huscarl.hpp"
-#include "raylib.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -17,7 +16,7 @@ public:
 
   void ApplyEffects() {
     for (const auto &huscarl : huscarls) {
-      huscarl->ApplyEffect();
+      huscarl->ApplyEffects();
     }
   }
 

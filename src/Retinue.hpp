@@ -1,11 +1,14 @@
 #pragma once
-#include "GameData.hpp"
+
+class GameData;
 
 class Retinue {
 public:
-  Retinue() = default;
+  Retinue(){};
+
   float experience = 0.5f;
 
+  int capacity = 30;
   int Axemen = 10;
   int Swordsmen = 5;
   int TwoHandedSwordsmen = 0;
@@ -19,5 +22,6 @@ public:
   float armorWeight = 0.30f;
   float armorQuality = 0.30f;
 
-  void ApplyEffect() { GameData::getInstance().addFood(-men * 0.02); }
+  void ApplyEffects(GameData &gamedata);
+  void ConsumeFood(GameData &gamedata);
 };

@@ -1,0 +1,31 @@
+# Makefile for building BanishedHost on macOS
+
+# Compiler
+CXX = clang++
+
+# Compiler flags
+CXXFLAGS = -std=c++17 -I../raylib/src -I./include -I./opt/homebrew/cellar/nlohmann-json/3.11.3/include/nlohmann
+CXXFLAGS += -I/opt/homebrew/opt/nlohmann-json
+
+LDFLAGS = -L/usr/local/lib -lraylib
+
+# Libraries and frameworks
+LIBS = -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL
+
+# Source files (only main.cpp needs to be listed)
+SRCS = main.cpp ./src/Retinue.cpp
+
+# Object files
+OBJS = $(SRCS:.cpp=.o)
+
+# Output executable
+TARGET = BanishedHost
+
+# Build rule
+$(TARGET): $(SRC)
+	$(CXX) $(CXXFLAGS) $(LIBS) -o $(TARGET) $(SRC) libraylib.a
+
+# Clean rule
+clean:
+	rm -f $(TARGET)
+

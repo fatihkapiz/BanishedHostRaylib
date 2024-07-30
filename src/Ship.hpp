@@ -1,22 +1,19 @@
 #pragma once
-#include "GameData.hpp"
+
+class GameData;
 
 class Ship {
 public:
   Ship() = default;
-  int hull = 1;
-  int fish_nets = 0;
-  int longer_oars = 0;
-  int improved_barrels = 0;
-  int square_sails = 0;
-  int carved_dragon_head = 0;
-  int painted_sail = 0;
-  int reinforced_oak_planking = 0;
-  int harpoons = 0;
+  int hull = 1;                    // retinue capacity
+  int fish_nets = 0;               // food trickle
+  int longer_oars = 0;             // speed
+  int improved_barrels = 0;        // food capacity
+  int square_sails = 0;            // speed
+  int carved_dragon_head = 0;      // fame
+  int painted_sail = 0;            // fame
+  int reinforced_oak_planking = 0; // accidents chance
+  int harpoons = 0;                // food trickle
 
-  void ApplyEffect();
+  void ApplyEffects(GameData &gamedata);
 };
-
-inline void Ship::ApplyEffect() {
-  GameData::getInstance().addFood(fish_nets * fish_nets);
-}

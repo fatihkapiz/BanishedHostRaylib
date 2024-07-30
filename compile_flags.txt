@@ -1,3 +1,4 @@
 -I../raylib/src
+-I./include
 -std=c++20
 
