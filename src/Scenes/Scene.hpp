@@ -1,6 +1,6 @@
 #pragma once
 
-typedef enum Screen { MENU, PLAY } Screen;
+typedef enum Screen { MENU, PLAY, COMBAT } Screen;
 
 class Scene {
 public:

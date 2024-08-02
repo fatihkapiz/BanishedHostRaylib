@@ -1,10 +1,14 @@
 #include "raylib.h"
+#include "src/Scenes/CombatScene.hpp"
 #include "src/Scenes/GameScene.hpp"
 #include "src/Scenes/MenuScene.hpp"
 #include <memory>
 
+int screenWidth = 1200;
+int screenHeight = 800;
+
 int main(void) {
-  InitWindow(800, 450, "raylib [core] example - basic window");
+  InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
   SetTargetFPS(60);
 
   GameData gamedata;
@@ -12,7 +16,11 @@ int main(void) {
   Scene *scene;
   std::unique_ptr<MenuScene> menuScene = std::make_unique<MenuScene>();
   std::unique_ptr<GameScene> gameScene = std::make_unique<GameScene>(gamedata);
-  scene = menuScene.get();
+  std::unique_ptr<CombatScene> combatScene =
+      std::make_unique<CombatScene>(gamedata);
+
+  scene = combatScene.get();
+  Scene::screen = COMBAT;
 
   float log = 10000;
 
@@ -23,6 +31,10 @@ int main(void) {
       std::cout << Scene::screen << std::endl;
       log += 10000;
     }
+
+    Camera2D camera = {0};
+    camera.offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f};
+    BeginMode2D(camera);
 
     // handle input here
     if (scene->screen == PLAY && scene == menuScene.get()) {
@@ -43,6 +55,7 @@ int main(void) {
 
     scene->render();
 
+    EndMode2D();
     EndDrawing();
   }
 
