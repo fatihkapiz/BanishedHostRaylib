@@ -1,5 +1,5 @@
 #pragma once
-#include "../Gamedata.hpp"
+#include "../GameData.hpp"
 #include "../constants/Constants.hpp"
 #include "Gold.hpp"
 #include "Panel.hpp"

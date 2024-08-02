@@ -1,5 +1,5 @@
 #include "Ship.hpp"
-#include "Gamedata.hpp"
+#include "GameData.hpp"
 
 void Ship::ApplyEffects(GameData &gamedata) {
   // fish nets
