@@ -83,8 +83,8 @@ struct Hex {
   Vector2 DrawHexagonCorner(Vector2 center, float size, int i) {
     float angleDeg = 60 * i - 30;
     float angleRad = PI / 180 * angleDeg;
-    return Vector2{center.x + size * cos(angleRad),
-                   center.y + size * sin(angleRad)};
+    return Vector2{center.x + size * cosf(angleRad),
+                   center.y + size * sinf(angleRad)};
   }
 
   void DrawHexagon(Vector2 center, float size) {

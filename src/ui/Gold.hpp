@@ -1,5 +1,5 @@
 #pragma once
-#include "../Gamedata.hpp"
+#include "../GameData.hpp"
 #include "../constants/Constants.hpp"
 #include "UIElement.hpp"
 #include "raylib.h"
