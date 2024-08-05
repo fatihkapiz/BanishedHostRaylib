@@ -9,6 +9,12 @@ int screenHeight = 800;
 
 int main(void) {
   InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+
+  Camera2D camera = {0};
+  camera.target = (Vector2){0, 0};
+  camera.offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f};
+  BeginMode2D(camera);
+
   SetTargetFPS(60);
 
   GameData gamedata;
@@ -25,16 +31,11 @@ int main(void) {
   float log = 10000;
 
   while (!WindowShouldClose()) {
-    std::cout << "Running" << std::endl;
     log -= 16;
     if (log < 0) {
       std::cout << Scene::screen << std::endl;
       log += 10000;
     }
-
-    Camera2D camera = {0};
-    camera.offset = (Vector2){screenWidth / 2.0f, screenHeight / 2.0f};
-    BeginMode2D(camera);
 
     // handle input here
     if (scene->screen == PLAY && scene == menuScene.get()) {
@@ -55,10 +56,10 @@ int main(void) {
 
     scene->render();
 
-    EndMode2D();
     EndDrawing();
   }
 
+  EndMode2D();
   CloseWindow();
 
   return 0;

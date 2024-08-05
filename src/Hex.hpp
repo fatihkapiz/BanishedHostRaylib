@@ -1,4 +1,5 @@
 #pragma once
+#include "constants/Constants.hpp"
 #include "raylib.h"
 #include <cmath>
 #include <string>
@@ -23,6 +24,10 @@ struct Hex {
     s = -q - r;
   }
 
+  int AxialDistance(Hex &a, Hex &b) {
+    return (abs(a.q - b.q) + abs(a.r - b.r) + abs(a.s - b.s)) / 2;
+  }
+
   bool operator==(const Hex &other) const {
     return q == other.q && r == other.r && s == other.s;
   }
@@ -38,13 +43,14 @@ struct Hex {
   Hex operator*(int k) const { return Hex(q * k, r * k, size, terrain); }
 
   Vector2 axialToCartesian(int q, int r, float size) const {
-    float x = size * sqrt(3) * (q + r / 2.0);
-    float y = size * 3 / 2 * r;
+    float x = size * sqrt(3) * (q + r / 2.0) +
+              static_cast<int>(Constants::windowWidth / 2);
+    float y = size * 3 / 2 * r + static_cast<int>(Constants::windowHeight / 2);
     return Vector2{x, y};
   }
 
   struct Axial {
-    int q, r;
+    int q, r, s;
   };
 
   Axial cartesianToAxial(float x, float y, float size) const {
@@ -77,7 +83,7 @@ struct Hex {
       rs = -rq - rr;
     }
 
-    return Axial{rq, rr};
+    return Axial{rq, rr, rs};
   }
 
   Vector2 DrawHexagonCorner(Vector2 center, float size, int i) {
@@ -96,13 +102,24 @@ struct Hex {
 
   void DrawAxialPoints() {
     Axial qr = cartesianToAxial();
-    std::string str =
-        "q: " + std::to_string(qr.q) + " r: " + std::to_string(qr.r);
+    std::string str = "q: " + std::to_string(qr.q) +
+                      " r: " + std::to_string(qr.r) +
+                      " s: " + std::to_string(qr.s);
+    DrawText(str.c_str(), center.x, center.y, 10, BLACK);
+  }
+  void DrawAxialPointsSelf() {
+    std::string str = "q: " + std::to_string(this->q) +
+                      " r: " + std::to_string(this->r) +
+                      " s: " + std::to_string(this->s);
     DrawText(str.c_str(), center.x, center.y, 10, BLACK);
   }
 
   void update() {}
-  void render() { DrawHexagon(center, size); }
+  void render() { // DrawHexagon(center, size);
+    DrawPoly(center, 6, size, 30, GREEN);
+    DrawPolyLines(center, 6, size, 30, BLACK);
+    DrawAxialPointsSelf();
+  }
 };
 
 /*
