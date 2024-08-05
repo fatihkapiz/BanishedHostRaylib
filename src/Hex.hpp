@@ -1,45 +1,26 @@
 #pragma once
+#include "HexLayout.hpp"
 #include "constants/Constants.hpp"
-#include "raylib.h"
+#include <cassert>
 #include <cmath>
 #include <string>
 
 enum Terrain { FLATLAND, WOODS, ROUGH_TERRAIN };
-
-struct Axial {
-  int q, r, s;
-
-  Axial(int q, int r, int s) : q(q), r(r), s(s) {}
-  Axial(int q, int r) : q(q), r(r), s(-q - r) {}
-
-  bool operator==(const Axial &other) const {
-    return q == other.q && r == other.r && s == other.s;
-  }
-
-  Axial operator+(const Axial &other) const {
-    return Axial(q + other.q, r + other.r, s + other.s);
-  }
-
-  Axial operator-(const Axial &other) const {
-    return Axial(q - other.q, r - other.r, s + other.s);
-  }
-
-  Axial operator*(int k) const { return Axial(q * k, r * k, s * k); }
-};
 
 struct Hex {
   Axial axial;
   Terrain terrain;
   float size;
   Vector2 center;
+  Layout &layout;
 
-  Hex(int q, int r, float size, Terrain terrain)
-      : axial(q, r), terrain(terrain), size(size),
-        center(axialToCartesian(q, r, size)) {}
+  Hex(int q, int r, float size, Terrain terrain, Layout &layout)
+      : axial(q, r), terrain(terrain), size(size), layout(layout),
+        center(hex_to_pixel(layout, Axial(q, r))) {}
 
-  Hex(float x, float y, float size, Terrain terrain)
+  Hex(float x, float y, float size, Terrain terrain, Layout &layout)
       : axial(cartesianToAxial(x, y, size)), center(Vector2{x, y}), size(size),
-        terrain(terrain) {}
+        layout(layout), terrain(terrain) {}
 
   const std::vector<Axial> &hex_directions() {
     static const std::vector<Axial> directions = {
@@ -48,7 +29,16 @@ struct Hex {
     return directions;
   }
 
-  int AxialDistance(Axial &a, Axial &b) {
+  Axial axialDirection(int direction) {
+    assert(direction >= 0 && direction <= 5);
+    return hex_directions()[direction];
+  }
+
+  Axial axialNeighbour(Axial start, int direction) {
+    return start + axialDirection(direction);
+  }
+
+  int axialDistance(Axial &a, Axial &b) {
     return (abs(a.q - b.q) + abs(a.r - b.r) + abs(a.s - b.s)) / 2;
   }
 
