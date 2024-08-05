@@ -6,41 +6,51 @@
 
 enum Terrain { FLATLAND, WOODS, ROUGH_TERRAIN };
 
-struct Hex {
+struct Axial {
   int q, r, s;
+
+  Axial(int q, int r, int s) : q(q), r(r), s(s) {}
+  Axial(int q, int r) : q(q), r(r), s(-q - r) {}
+
+  bool operator==(const Axial &other) const {
+    return q == other.q && r == other.r && s == other.s;
+  }
+
+  Axial operator+(const Axial &other) const {
+    return Axial(q + other.q, r + other.r, s + other.s);
+  }
+
+  Axial operator-(const Axial &other) const {
+    return Axial(q - other.q, r - other.r, s + other.s);
+  }
+
+  Axial operator*(int k) const { return Axial(q * k, r * k, s * k); }
+};
+
+struct Hex {
+  Axial axial;
   Terrain terrain;
   float size;
   Vector2 center;
 
   Hex(int q, int r, float size, Terrain terrain)
-      : q(q), r(r), s(-q - r), terrain(terrain), size(size),
+      : axial(q, r), terrain(terrain), size(size),
         center(axialToCartesian(q, r, size)) {}
 
   Hex(float x, float y, float size, Terrain terrain)
-      : center(Vector2{x, y}), size(size), terrain(terrain) {
-    auto axial = cartesianToAxial(x, y, size);
-    q = axial.q;
-    r = axial.r;
-    s = -q - r;
+      : axial(cartesianToAxial(x, y, size)), center(Vector2{x, y}), size(size),
+        terrain(terrain) {}
+
+  const std::vector<Axial> &hex_directions() {
+    static const std::vector<Axial> directions = {
+        Axial(1, 0, -1), Axial(1, -1, 0), Axial(0, -1, 1),
+        Axial(-1, 0, 1), Axial(-1, 1, 0), Axial(0, 1, -1)};
+    return directions;
   }
 
-  int AxialDistance(Hex &a, Hex &b) {
+  int AxialDistance(Axial &a, Axial &b) {
     return (abs(a.q - b.q) + abs(a.r - b.r) + abs(a.s - b.s)) / 2;
   }
-
-  bool operator==(const Hex &other) const {
-    return q == other.q && r == other.r && s == other.s;
-  }
-
-  Hex operator+(const Hex &other) const {
-    return Hex(q + other.q, r + other.r, size, terrain);
-  }
-
-  Hex operator-(const Hex &other) const {
-    return Hex(q - other.q, r - other.r, size, terrain);
-  }
-
-  Hex operator*(int k) const { return Hex(q * k, r * k, size, terrain); }
 
   Vector2 axialToCartesian(int q, int r, float size) const {
     float x = size * sqrt(3) * (q + r / 2.0) +
@@ -48,10 +58,6 @@ struct Hex {
     float y = size * 3 / 2 * r + static_cast<int>(Constants::windowHeight / 2);
     return Vector2{x, y};
   }
-
-  struct Axial {
-    int q, r, s;
-  };
 
   Axial cartesianToAxial(float x, float y, float size) const {
     float q = (sqrt(3) / 3 * x - 1.0 / 3 * y) / size;
@@ -107,74 +113,19 @@ struct Hex {
                       " s: " + std::to_string(qr.s);
     DrawText(str.c_str(), center.x, center.y, 10, BLACK);
   }
+
   void DrawAxialPointsSelf() {
-    std::string str = "q: " + std::to_string(this->q) +
-                      " r: " + std::to_string(this->r) +
-                      " s: " + std::to_string(this->s);
-    DrawText(str.c_str(), center.x, center.y, 10, BLACK);
+    std::string str = "q: " + std::to_string(this->axial.q) +
+                      " r: " + std::to_string(this->axial.r) +
+                      " s: " + std::to_string(this->axial.s);
+    DrawText(str.c_str(), center.x - size, center.y, 8, BLACK);
   }
 
   void update() {}
+
   void render() { // DrawHexagon(center, size);
     DrawPoly(center, 6, size, 30, GREEN);
     DrawPolyLines(center, 6, size, 30, BLACK);
     DrawAxialPointsSelf();
   }
 };
-
-/*
-struct Hex {
-  Vector3 axial;
-  Terrain terrain;
-  float size;
-  Vector2 center;
-
-  Hex(int q, int r, int size) : size(size), terrain(FLATLAND) {
-    axial.x = q;
-    axial.y = r;
-    axial.z = -q - r;
-  }
-
-  Hex(float x, float y, float size, Terrain _terrain)
-      : center(Vector2{x, y}), size(size), terrain(_terrain) {}
-
-  int hex_length(Hex hex) {
-    return int((abs(hex.axial.x) + abs(hex.axial.y) + abs(hex.axial.z)) / 2);
-  }
-
-  int hex_distance(Hex a, Hex b) { return hex_length(a.axial - b.axial); }
-
-  static Vector2 AxialToCartesian(int q, int r, int size) {
-    float x = size * std::sqrt(3) * (q + r / 2.0);
-    float y = size * 3 / 2 * q;
-    return Vector2{x, y};
-  }
-
-  Vector2 DrawHexagonCorner(Vector2 center, float size, int i) {
-    float angleDeg = 60 * i - 30;
-    float angleRad = PI / 180 * angleDeg;
-    return Vector2{center.x + size * std::cos(angleRad),
-                   center.y + size * std::sin(angleRad)};
-  }
-
-  void DrawHexagon(Vector2 center, float size) {
-    for (int i = 0; i < 6; i++) {
-      DrawLineV(DrawHexagonCorner(center, size, i),
-                DrawHexagonCorner(center, size, i + 1), BLACK);
-    }
-  }
-
-  void DrawAxialPoints() {
-    std::string str = "q: " + std::to_string(q) + " r: " + std::to_string(r);
-    DrawText(str.c_str(), AxialToCartesian(q, r, size).x,
-             AxialToCartesian(q, r, size).y, 10, BLACK);
-  }
-
-  void update() {}
-  void render() {
-    DrawHexagon(center, size);
-    DrawAxialPoints();
-    // DrawPoly(center, 6, size, 90, GREEN);
-    // DrawPolyLines(center, 6, size, 90, BLACK);
-  }
-};*/

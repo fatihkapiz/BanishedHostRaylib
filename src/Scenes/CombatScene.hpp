@@ -14,7 +14,7 @@ private:
 public:
   CombatScene(GameData &gamedata) : gamedata(gamedata) {
     ui = std::make_unique<GameSceneUI>(gamedata);
-    hexmap = std::make_unique<Hexmap>(12, 12, 40);
+    hexmap = std::make_unique<Hexmap>(6, 40);
 
     // camera
     camera.target = (Vector2){0, 0}; // Initial target
